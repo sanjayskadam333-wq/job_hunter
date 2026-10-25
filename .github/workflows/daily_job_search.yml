@@ -1,0 +1,33 @@
+name: Daily Automated Job Search Bot
+
+on:
+  schedule:
+    - cron: '0 8 * * *' # Runs daily at 08:00 AM UTC
+  workflow_dispatch: # Allows manual 1-click execution on GitHub
+
+jobs:
+  job-hunter:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install google-generativeai requests
+
+      - name: Execute Job Search Script
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GMAIL_USER: ${{ secrets.GMAIL_USER }}
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+          MY_RESUME: ${{ secrets.MY_RESUME }}
+        run: |
+          python job_hunter.py
