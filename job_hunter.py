@@ -34,7 +34,7 @@ def fetch_jobs():
 
 # 2. Score Match & Generate Cover Letter via Gemini AI
 def evaluate_job(job):
-    model = genai.GenerativeModel('gemini-1.5-flash')
+    model = genai.GenerativeModel('gemini-1.5-flash-latest')
     
     prompt = f"""
     You are an executive career coach AI. Evaluate this job opening against the candidate's resume.
