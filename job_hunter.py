@@ -5,11 +5,14 @@ from email.mime.text import MIMEText
 import requests
 import google.generativeai as genai
 
-# Secrets from GitHub Environment
-GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
+# Read API credentials from GitHub Secrets
+GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY") or os.environ.get("GOOGLE_API_KEY")
 GMAIL_USER = os.environ.get("GMAIL_USER")
 GMAIL_APP_PASSWORD = os.environ.get("GMAIL_APP_PASSWORD")
 MY_RESUME = os.environ.get("MY_RESUME", "Your resume text here")
+
+if not GEMINI_API_KEY:
+    raise ValueError("GEMINI_API_KEY is missing! Please check your GitHub Secrets.")
 
 genai.configure(api_key=GEMINI_API_KEY)
 
@@ -25,7 +28,7 @@ def fetch_jobs():
                 "title": item.get("title"),
                 "company": item.get("company_name"),
                 "url": item.get("url"),
-                "description": item.get("description", "")[:2000]  # Truncated for token efficiency
+                "description": item.get("description", "")[:2000]
             })
         return jobs
     except Exception as e:
