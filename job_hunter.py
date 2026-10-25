@@ -1,5 +1,6 @@
 import os
 import json
+import time
 import smtplib
 from email.mime.text import MIMEText
 import requests
@@ -113,3 +114,5 @@ if __name__ == "__main__":
             send_email_alert(job, eval_data)
         else:
             print("-> Skipped (below 75% match threshold).")
+            
+        time.sleep(13)  # Rate limit safety delay for Gemini Free Tier (5 requests/min)
